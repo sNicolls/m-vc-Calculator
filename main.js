@@ -24,7 +24,7 @@ function CalcModel(parent){
     //GETS INPUT FROM THE VIEW AND FORMATS IT FOR MATHEMATICAL EVALUATION//
     this.prepareEquation = function(inputArray) {
         if(inputArray.length === 1){
-            parent.viewControl.displayDataREAL(inputArray)
+            parent.viewControl.displayResults(inputArray)
             console.log(inputArray)
         }
         else if(inputArray.indexOf('x') > -1 || inputArray.indexOf('/') > -1){
@@ -74,7 +74,7 @@ function CalcModel(parent){
 //AN OBJECT THAT HANDLES BUTTONS, AND INPUT//
 function ViewControl(parent) {
     this.parent = parent;
-    var hasSentEq = false;
+    var hasSentEquation = false;
     var inputs = [''];
     var lastOpPressed = null;
     var lastNumPressed = null;
@@ -96,9 +96,9 @@ function ViewControl(parent) {
     this.handleNumbers = function() {
         this.numPressed = $(this).text();
         lastNumPressed = this.numPressed;
+        if(hasSentEquation === true){
 
-        if(hasSentEq === true){
-            hasSentEq = false;
+            hasSentEquation = false;
             inputs = [this.numPressed]
         } else if (this.numPressed === '.' && inputs[inputs.length - 1].indexOf(".") > -1){
         } else if (isNaN(inputs[inputs.length - 1]) === false || inputs[inputs.length - 1] === "."){
@@ -113,6 +113,7 @@ function ViewControl(parent) {
     };
     //TRIGGERED BY AN OPERATOR onClick, ADDS OPERATORS TO THE INPUT STRING AND CONTROLS THEM//
     this.handleOperators = function() {
+        hasSentEquation = false;
         this.opPressed = $(this).text();
         lastOpPressed = this.opPressed;
         if(inputs.length >= 3 && this.opPressed !== 'x' && this.opPressed !== '/'){
@@ -133,7 +134,7 @@ function ViewControl(parent) {
     };
     //TRIGGERED BY THE "=" onClick, SENDS INPUT DATA TO THE MATH OBJ//
     this.sendEquation = function() {
-        hasSentEq = true;
+        hasSentEquation = true;
         hasCleared = false;
         if (inputs.length === 1 && lastOpPressed !== null) {
             inputs.push(lastOpPressed, lastNumPressed)
@@ -163,13 +164,12 @@ function ViewControl(parent) {
         console.log(inputs)
     };
     //DISPLAYS INPUT DATA IN THE RIGHT HAND SIDE DIV ON THE CALC SCREEN//
-    this.displayData = function(input){
-        console.log(inputs[inputs.length - 1])
+    this.displayData = function(){
         $("#calc_screen").text(inputs[inputs.length - 1]);
     };
 
     //DISPLAYS EVALUATED DATA IN THE LEFT HAND DIV ON THE CALC SCREEN//
-    this.displayDataREAL = function(input){
+    this.displayResults = function(input){
         $("#calc_screen").text(input);
     };
 

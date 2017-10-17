@@ -21,6 +21,7 @@ body{
     color: gainsboro;
     font-size: 7vw;
     display: flex;
+    align-items: center;
     height: 14.6%;
     justify-content: flex-end;
     font-family: "Karla";
