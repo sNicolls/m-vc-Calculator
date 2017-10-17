@@ -23,6 +23,7 @@ body{
     display: flex;
     align-items: center;
     height: 14.6%;
+    width: 100%;
     justify-content: flex-end;
     font-family: "Karla";
 }
