@@ -48,14 +48,14 @@ body{
     background-color: rgba(0, 206, 209, 0.1);
 }
 .num_btn:hover{
-    background-color: rgba(0, 206, 209, 0.6);
+    background-color: rgba(50, 206, 209, 0.6);
 }
 .operator_btn{
     color: white;
-    background-color: rgba(0, 206, 09, 0.1);
+    background-color: rgba(50, 206, 09, 0.1);
 }
 .operator_btn:hover{
-    background-color: rgba(0, 206, 09, 0.6);
+    background-color: rgba(50, 206, 29, 0.6);
 }
 .equals_btn{
     font-size: 27px;
@@ -64,13 +64,22 @@ body{
 .equals_btn:hover{
     background-color: rgba(255, 255, 255, 0.6);
 }
-#c_btn, #ce_btn{
+#c_btn{
+    color: white;
+    background-color: rgba(205, 50, 0, 0.1);
+}
+#c_btn:hover{
+    background-color: rgba(205, 50, 0, 0.6);
+}
+#pos_neg_btn{
     color: white;
     background-color: rgba(255, 128, 0, 0.1);
 }
-#c_btn:hover, #ce_btn:hover{
+#pos_neg_btn:hover{
     background-color: rgba(255, 128, 0, 0.6);
 }
+
+
 
 @media screen and (max-device-width : 414px) {
     #calc_container{

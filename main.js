@@ -24,6 +24,7 @@ function CalcModel(parent){
     //GETS INPUT FROM THE VIEW AND FORMATS IT FOR MATHEMATICAL EVALUATION//
     this.prepareEquation = function(inputArray) {
         if(inputArray.length === 1){
+            inputArray[0] = inputArray[0].toString()
             parent.viewControl.displayResults(inputArray)
             console.log(inputArray)
         }
@@ -90,7 +91,7 @@ function ViewControl(parent) {
         $(".operator_btn").bind("click", this.handleOperators);
         $(".equals_btn").bind("click", this.sendEquation);
         $("#c_btn").bind("click", this.clearData);
-        $("#ce_btn").bind("click", this.clearEntry);
+        $("#pos_neg_btn").bind("click", this.swapSigns);
     };
     //TRIGGERED BY A NUMBER onClick, ADDS NUMBERS TO THE INPUT STRING//
     this.handleNumbers = function() {
@@ -151,24 +152,31 @@ function ViewControl(parent) {
     //CLEARS INPUT AND RESETS THE CALCULATOR//
     this.clearData = function () {
         inputs = [''];
-        $("#calc_screen").text("");
+        $("#calc_screen").text("0");
         console.log(inputs)
     };
-    this.clearEntry = function(){
-        if(hasCleared === false) {
-            inputs.splice(inputs.length - 1, 1);
-            $("#niche_display").text("0");
-            console.log(inputs);
+
+    //CHANGES POSITIVE TO NEGATIVE, NEGATIVE TO POSITIVE
+    this.swapSigns = function(){
+        console.log("SWAP")
+        if(/[0-9]/.test(inputs[inputs.length - 1]) && inputs[inputs.length - 1][0] === '-'){
+            console.log("TRIUE")
+            inputs[inputs.length - 1] = inputs[inputs.length - 1].substring(1, inputs[inputs.length - 1].length)
+            parent.viewControl.displayData()
+        }else{
+            inputs[inputs.length - 1] = '-' + inputs[inputs.length - 1];
+            parent.viewControl.displayData()
         }
-        hasCleared = true;
-        console.log(inputs)
     };
-    //DISPLAYS INPUT DATA IN THE RIGHT HAND SIDE DIV ON THE CALC SCREEN//
+
+
+
+    //DISPLAYS INPUT DATA//
     this.displayData = function(){
         $("#calc_screen").text(inputs[inputs.length - 1]);
     };
 
-    //DISPLAYS EVALUATED DATA IN THE LEFT HAND DIV ON THE CALC SCREEN//
+    //DISPLAYS EVALUATED DATA//
     this.displayResults = function(input){
         $("#calc_screen").text(input);
     };
@@ -187,4 +195,4 @@ function ParentObject(){
 //INITIALIZE THE EVERYTHING///
 $(document).ready(function(){
     var missionControl = new ParentObject();
-})
+});
