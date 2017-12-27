@@ -78,8 +78,12 @@ body{
 #pos_neg_btn:hover{
     background-color: rgba(255, 128, 0, 0.6);
 }
-
-
+@media (min-width: 900px){
+    #calc_container{
+        width: 450px;
+        height: 675px;
+    }
+}
 
 @media screen and (max-device-width : 414px) {
     #calc_container{
