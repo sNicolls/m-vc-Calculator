@@ -24,7 +24,8 @@ function CalcModel(parent){
     //GETS INPUT FROM THE VIEW AND FORMATS IT FOR MATHEMATICAL EVALUATION//
     this.prepareEquation = function(inputArray) {
         if(inputArray.length === 1){
-            parent.viewControl.displayDataREAL(inputArray)
+            inputArray[0] = inputArray[0].toString()
+            parent.viewControl.displayResults(inputArray)
             console.log(inputArray)
         }
         else if(inputArray.indexOf('x') > -1 || inputArray.indexOf('/') > -1){
@@ -74,7 +75,7 @@ function CalcModel(parent){
 //AN OBJECT THAT HANDLES BUTTONS, AND INPUT//
 function ViewControl(parent) {
     this.parent = parent;
-    var hasSentEq = false;
+    var hasSentEquation = false;
     var inputs = [''];
     var lastOpPressed = null;
     var lastNumPressed = null;
@@ -90,15 +91,15 @@ function ViewControl(parent) {
         $(".operator_btn").bind("click", this.handleOperators);
         $(".equals_btn").bind("click", this.sendEquation);
         $("#c_btn").bind("click", this.clearData);
-        $("#ce_btn").bind("click", this.clearEntry);
+        $("#pos_neg_btn").bind("click", this.swapSigns);
     };
     //TRIGGERED BY A NUMBER onClick, ADDS NUMBERS TO THE INPUT STRING//
     this.handleNumbers = function() {
         this.numPressed = $(this).text();
         lastNumPressed = this.numPressed;
+        if(hasSentEquation === true){
 
-        if(hasSentEq === true){
-            hasSentEq = false;
+            hasSentEquation = false;
             inputs = [this.numPressed]
         } else if (this.numPressed === '.' && inputs[inputs.length - 1].indexOf(".") > -1){
         } else if (isNaN(inputs[inputs.length - 1]) === false || inputs[inputs.length - 1] === "."){
@@ -113,6 +114,7 @@ function ViewControl(parent) {
     };
     //TRIGGERED BY AN OPERATOR onClick, ADDS OPERATORS TO THE INPUT STRING AND CONTROLS THEM//
     this.handleOperators = function() {
+        hasSentEquation = false;
         this.opPressed = $(this).text();
         lastOpPressed = this.opPressed;
         if(inputs.length >= 3 && this.opPressed !== 'x' && this.opPressed !== '/'){
@@ -133,7 +135,7 @@ function ViewControl(parent) {
     };
     //TRIGGERED BY THE "=" onClick, SENDS INPUT DATA TO THE MATH OBJ//
     this.sendEquation = function() {
-        hasSentEq = true;
+        hasSentEquation = true;
         hasCleared = false;
         if (inputs.length === 1 && lastOpPressed !== null) {
             inputs.push(lastOpPressed, lastNumPressed)
@@ -150,26 +152,32 @@ function ViewControl(parent) {
     //CLEARS INPUT AND RESETS THE CALCULATOR//
     this.clearData = function () {
         inputs = [''];
-        $("#calc_screen").text("");
+        $("#calc_screen").text("0");
         console.log(inputs)
     };
-    this.clearEntry = function(){
-        if(hasCleared === false) {
-            inputs.splice(inputs.length - 1, 1);
-            $("#niche_display").text("0");
-            console.log(inputs);
+
+    //CHANGES POSITIVE TO NEGATIVE, NEGATIVE TO POSITIVE
+    this.swapSigns = function(){
+        console.log("SWAP")
+        if(/[0-9]/.test(inputs[inputs.length - 1]) && inputs[inputs.length - 1][0] === '-'){
+            console.log("TRIUE")
+            inputs[inputs.length - 1] = inputs[inputs.length - 1].substring(1, inputs[inputs.length - 1].length)
+            parent.viewControl.displayData()
+        }else{
+            inputs[inputs.length - 1] = '-' + inputs[inputs.length - 1];
+            parent.viewControl.displayData()
         }
-        hasCleared = true;
-        console.log(inputs)
     };
-    //DISPLAYS INPUT DATA IN THE RIGHT HAND SIDE DIV ON THE CALC SCREEN//
-    this.displayData = function(input){
-        console.log(inputs[inputs.length - 1])
+
+
+
+    //DISPLAYS INPUT DATA//
+    this.displayData = function(){
         $("#calc_screen").text(inputs[inputs.length - 1]);
     };
 
-    //DISPLAYS EVALUATED DATA IN THE LEFT HAND DIV ON THE CALC SCREEN//
-    this.displayDataREAL = function(input){
+    //DISPLAYS EVALUATED DATA//
+    this.displayResults = function(input){
         $("#calc_screen").text(input);
     };
 
@@ -187,4 +195,4 @@ function ParentObject(){
 //INITIALIZE THE EVERYTHING///
 $(document).ready(function(){
     var missionControl = new ParentObject();
-})
+});
